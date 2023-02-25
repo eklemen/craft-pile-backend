@@ -17,10 +17,13 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
+  async login(user: { email: string; password: number }) {
+    const payload = { email: user.email, sub: user.password };
     return {
       access_token: this.jwtService.sign(payload),
     };
   }
 }
+
+// request to /auth/login
+// calls auth.service.login which calls user.findone

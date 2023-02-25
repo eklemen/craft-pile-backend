@@ -7,6 +7,7 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { LocalStrategy } from './local.strategy';
 import { UserModule } from '../user/user.module';
 import { ConfigService } from '@nestjs/config';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { ConfigService } from '@nestjs/config';
         return {
           secret: config.get<string>('JWT_SECRET_KEY'),
           signOptions: {
-            expiresIn: '1d',
+            expiresIn: '7d',
           },
         };
       },
@@ -25,7 +26,7 @@ import { ConfigService } from '@nestjs/config';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}
