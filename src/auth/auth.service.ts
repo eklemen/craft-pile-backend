@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
 import { UserService } from '../user/user.service';
 
 @Injectable()
@@ -8,12 +9,17 @@ export class AuthService {
     private readonly userService: UserService,
     private jwtService: JwtService,
   ) {}
+
   async validateUser(email: string, password: string): Promise<any> {
-    const user = await this.userService.findOne(email);
-    if (user && user.password === password) {
-      const { password, ...result } = user;
-      return result;
+    const user = await this.userService.getUser(email);
+    if (!user) return null;
+    const passwordValid = await bcrypt.compare(password, user.password);
+    if (!user || !passwordValid) {
+      throw new UnauthorizedException(
+        'Could not find the user/password combination',
+      );
     }
+    if (user && passwordValid) return user;
     return null;
   }
 
@@ -23,7 +29,13 @@ export class AuthService {
       access_token: this.jwtService.sign(payload),
     };
   }
-}
 
-// request to /auth/login
-// calls auth.service.login which calls user.findone
+  async register({ email, password }: { email: string; password: string }) {
+    const saltOrRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltOrRounds);
+    return await this.userService.createUser({
+      email,
+      password: hashedPassword,
+    });
+  }
+}
