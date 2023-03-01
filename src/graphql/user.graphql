@@ -1,9 +1,51 @@
-type User {
+type Child {
   id: ID!
   name: String!
-  email: String!
+  dateOfBirth: String
 }
+
+type Album {
+  id: ID!
+  name: String!
+  description: String
+}
+
+type Account {
+  id: ID!
+  albums: [Album]
+  children: [Child]
+}
+
+type User {
+  id: ID!
+  access_token: String,
+  email: String!
+  account: Account!
+}
+
+#####################
+# Input types
+#####################
+
+input AuthUserInput {
+  email: String!
+  password: String!
+}
+
+#####################
+# END Input types
+#####################
 
 type Query {
   getUser(id: ID!): User
+}
+
+
+type Mutation {
+  registerUser(input: AuthUserInput): User
+  login(input: AuthUserInput): User
+#  createUser(input: CreateUserInput): User
+#  createAccount(userId: ID!): Account
+#  createChild(accountId: ID!, name: String!, dateOfBirth: String): Child
+#  createAlbum(accountId: ID!, name: String!, description: String): Album
 }

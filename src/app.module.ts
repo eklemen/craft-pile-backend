@@ -22,6 +22,7 @@ import { options } from './db/datasource';
         path: join(process.cwd(), 'src/graphql.ts'),
         emitTypenameField: true,
       },
+      playground: true,
     }),
     UserModule,
   ],
