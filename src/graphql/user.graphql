@@ -23,6 +23,9 @@ type User {
   account: Account!
 }
 
+type AuthUserToken {
+  authToken: String!
+}
 #####################
 # Input types
 #####################
@@ -37,13 +40,13 @@ input AuthUserInput {
 #####################
 
 type Query {
-  getUser(id: ID!): User
+  getUser: User
 }
 
 
 type Mutation {
-  registerUser(input: AuthUserInput): User
-  login(input: AuthUserInput): User
+  registerUser(input: AuthUserInput): AuthUserToken
+  login(input: AuthUserInput): AuthUserToken
 #  createUser(input: CreateUserInput): User
 #  createAccount(userId: ID!): Account
 #  createChild(accountId: ID!, name: String!, dateOfBirth: String): Child

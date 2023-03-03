@@ -42,15 +42,20 @@ export interface User {
     account: Account;
 }
 
+export interface AuthUserToken {
+    __typename?: 'AuthUserToken';
+    authToken: string;
+}
+
 export interface IQuery {
     __typename?: 'IQuery';
-    getUser(id: string): Nullable<User> | Promise<Nullable<User>>;
+    getUser(): Nullable<User> | Promise<Nullable<User>>;
 }
 
 export interface IMutation {
     __typename?: 'IMutation';
-    registerUser(input?: Nullable<AuthUserInput>): Nullable<User> | Promise<Nullable<User>>;
-    login(input?: Nullable<AuthUserInput>): Nullable<User> | Promise<Nullable<User>>;
+    registerUser(input?: Nullable<AuthUserInput>): Nullable<AuthUserToken> | Promise<Nullable<AuthUserToken>>;
+    login(input?: Nullable<AuthUserInput>): Nullable<AuthUserToken> | Promise<Nullable<AuthUserToken>>;
 }
 
 type Nullable<T> = T | null;

@@ -7,7 +7,7 @@ import { DataSource } from 'typeorm';
 export class UserService {
   constructor(private datasource: DataSource) {}
 
-  async getUser(email: string): Promise<any | undefined> {
+  async getUser(email: string): Promise<User> {
     const user = await this.datasource.manager.find(User, {
       where: { email },
       relations: ['account', 'account.albums', 'account.children'],
