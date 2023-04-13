@@ -1,0 +1,30 @@
+type Album {
+  id: ID!
+  name: String!
+  description: String
+  photos: [Photo]!
+}
+
+#####################
+# Input types
+#####################
+input CreateAlbumInput {
+  name: String!
+  description: String
+  childId: ID!
+}
+
+input GetAlbumsForChildInput {
+  childId: ID!
+}
+#####################
+# END Input types
+#####################
+
+extend type Query {
+  getAlbumsForChild(input: GetAlbumsForChildInput): [Album]!
+}
+
+extend type Mutation {
+  createAlbum(input: CreateAlbumInput): [Album]!
+}

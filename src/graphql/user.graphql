@@ -1,0 +1,38 @@
+type User {
+  id: ID!
+  access_token: String,
+  email: String!
+  account: Account!
+  children: [Child!]!
+}
+
+type Account {
+  id: ID!
+  children: [Child]
+}
+
+type AuthUserToken {
+  authToken: String!
+}
+#####################
+# Input types
+#####################
+
+input AuthUserInput {
+  email: String!
+  password: String!
+}
+
+#####################
+# END Input types
+#####################
+
+type Query {
+  getUser: User
+}
+
+
+type Mutation {
+  registerUser(input: AuthUserInput): AuthUserToken
+  login(input: AuthUserInput): AuthUserToken
+}

@@ -1,0 +1,32 @@
+type Child {
+  id: ID!
+  name: String!
+  dateOfBirth: String
+  albums: [Album]!
+}
+
+#####################
+# Input types
+#####################
+
+input CreateChildInput {
+  name: String!
+  dateOfBirth: String
+}
+
+input DeleteChildInput {
+  id: ID!
+}
+
+#####################
+# END Input types
+#####################
+
+extend type Query {
+  getChildren: [Child]!
+}
+
+extend type Mutation {
+  createChild(input: CreateChildInput!): [Child]
+  deleteChild(input: DeleteChildInput!): [Child]
+}

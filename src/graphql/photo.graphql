@@ -1,0 +1,51 @@
+type Photo {
+  id: ID!
+  bucketName: String!
+  objectKey: String!
+  thumbnailKey: String!
+  presignedUrl: String
+  description: String
+  dateOfPhoto: String
+}
+
+type PilePhotos {
+  photos: [Photo]!
+  id: ID!
+  name: String!
+}
+#####################
+# Input types
+#####################
+# TODO: add pagination
+input GetPhotosForAlbumInput {
+  albumId: ID!
+}
+
+input DeletePhotosInput {
+  photoIds: [ID!]!
+}
+
+input AssignPhotosToAlbumInput {
+  photoIds: [ID!]!
+  albumId: ID!
+}
+
+input AssignPhotosToAnotherChildInput {
+  photoIds: [ID!]!
+  childId: ID!
+}
+#####################
+# END Input types
+#####################
+
+extend type Query {
+  getPhotosForAlbum(input: GetPhotosForAlbumInput): [Photo!]
+  getPilePhotos: [PilePhotos!]
+}
+
+extend type Mutation {
+  deletePhotos(input: DeletePhotosInput): [ID!]!
+  assignPhotosToAlbum(input: AssignPhotosToAlbumInput): [ID!]!
+#  TODO: add resolver for this
+  assignPhotosToAnotherChild(input: AssignPhotosToAnotherChildInput): [ID!]!
+}
