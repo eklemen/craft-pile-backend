@@ -31,12 +31,18 @@ import { S3Module } from './s3/s3.module';
     }),
     S3Module.registerAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        accessKeyId: configService.get('AWS_ACCESS_KEY_ID'),
-        secretAccessKey: configService.get('AWS_SECRET_ACCESS_KEY'),
-        region: configService.get('AWS_REGION'),
-        bucket: configService.get('AWS_BUCKET'),
-      }),
+      useFactory: (configService: ConfigService) => {
+        console.log(
+          'configService.get("FAKE_KEY")-------->',
+          configService.get('FAKE_KEY'),
+        );
+        return {
+          accessKeyId: configService.get('AWS_ACCESS_KEY_ID'),
+          secretAccessKey: configService.get('AWS_SECRET_ACCESS_KEY'),
+          region: configService.get('AWS_REGION'),
+          bucket: configService.get('AWS_BUCKET'),
+        };
+      },
       inject: [ConfigService],
       isGlobal: true,
     }),

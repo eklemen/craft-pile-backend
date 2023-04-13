@@ -26,6 +26,10 @@ jobs:
           username: ${{ secrets.AZURE_ACR_USERNAME }}
           password: ${{ secrets.AZURE_ACR_PASSWORD }}
 
+      - name: Set environment variables from GitHub secrets
+        run: |
+          echo "API_KEY=${{ secrets.FAKE_KEY }}" >> $GITHUB_ENV
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
