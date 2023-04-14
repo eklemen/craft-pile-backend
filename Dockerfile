@@ -20,6 +20,28 @@ RUN yarn install --frozen-lockfile --production=false
 # Copy the rest of the application
 COPY . .
 
+ARG DB_HOST
+ENV DB_HOST=${DB_HOST}
+
+ARG NODE_ENV
+ENV NODE_ENV=${NODE_ENV}
+
+ARG DB_PORT
+ENV DB_PORT=${DB_PORT}
+
+ARG DB_NAME
+ENV DB_NAME=${DB_NAME}
+
+ARG DB_USERNAME
+ENV DB_USERNAME=${DB_USERNAME}
+
+ARG DB_PASSWORD
+ENV DB_PASSWORD=${DB_PASSWORD}
+
+ARG SSL_CERT
+ENV SSL_CERT=${SSL_CERT}
+
+
 # Build the application
 RUN yarn build
 
