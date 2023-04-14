@@ -33,8 +33,8 @@ import { S3Module } from './s3/s3.module';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
         console.log(
-          'configService.get("FAKE_KEY")-------->',
-          configService.get('FAKE_KEY'),
+          'configService.get("DB_USERNAME")-------->',
+          configService.get('DB_USERNAME'),
         );
         return {
           accessKeyId: configService.get('AWS_ACCESS_KEY_ID'),
