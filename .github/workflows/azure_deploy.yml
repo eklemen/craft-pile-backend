@@ -39,7 +39,7 @@ jobs:
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
           echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-          echo "SSL_CERT=${{ secrets.SSL_CERT }}" >> .env
+          echo "SSL_CERT=$(echo '${{ secrets.SSL_CERT_64 }}' | base64 --decode)" >> .env
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2

@@ -19,6 +19,9 @@ RUN yarn install --frozen-lockfile --production=false
 
 # Copy the rest of the application
 COPY . .
+COPY .env .env
+
+RUN yarn add dotenv
 
 # Import the secret file
 RUN --mount=type=secret,id=env source=.env target=.env \
