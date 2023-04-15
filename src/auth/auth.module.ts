@@ -13,14 +13,12 @@ import { AuthService } from './auth.service';
     UserModule,
     PassportModule,
     JwtModule.registerAsync({
-      useFactory: (config: ConfigService) => {
-        return {
-          secret: config.get<string>('JWT_SECRET_KEY'),
-          signOptions: {
-            expiresIn: '7d',
-          },
-        };
-      },
+      useFactory: (config: ConfigService) => ({
+        secret: config.get<string>('JWT_SECRET_KEY'),
+        signOptions: {
+          expiresIn: '7d',
+        },
+      }),
       inject: [ConfigService],
     }),
   ],

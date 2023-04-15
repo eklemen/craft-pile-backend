@@ -33,7 +33,7 @@ import { S3Module } from './s3/s3.module';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
         console.log(
-          'configService.get("DB_USERNAME")-------->',
+          'configService.get("DB_USERNAME")--------->',
           configService.get('DB_USERNAME'),
         );
         return {
