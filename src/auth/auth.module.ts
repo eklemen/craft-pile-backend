@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
+import { AwsCognitoService } from './aws-cognito.service';
 
 @Module({
   imports: [
@@ -22,7 +23,13 @@ import { AuthService } from './auth.service';
       inject: [ConfigService],
     }),
   ],
-  providers: [LocalStrategy, JwtStrategy, AuthService, AuthResolver],
+  providers: [
+    LocalStrategy,
+    JwtStrategy,
+    AuthService,
+    AuthResolver,
+    AwsCognitoService,
+  ],
   exports: [AuthService],
 })
 export class AuthModule {}

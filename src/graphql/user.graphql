@@ -12,7 +12,20 @@ type Account {
 }
 
 type AuthUserToken {
-  authToken: String!
+  accessToken: String!
+  expiresIn: Int!
+  idToken: String!
+  refreshToken: String!
+}
+
+type LoginOutput {
+  data: AuthUserToken
+  error: String
+}
+
+type RegistrationOutput {
+  success: Boolean!
+  error: String
 }
 #####################
 # Input types
@@ -21,6 +34,11 @@ type AuthUserToken {
 input AuthUserInput {
   email: String!
   password: String!
+}
+
+input ConfirmationCodeInput {
+  code: String!
+  email: String!
 }
 
 #####################
@@ -33,6 +51,7 @@ type Query {
 
 
 type Mutation {
-  registerUser(input: AuthUserInput): AuthUserToken
-  login(input: AuthUserInput): AuthUserToken
+  registerUser(input: AuthUserInput): RegistrationOutput
+  verifyConfirmationCode(input: ConfirmationCodeInput): RegistrationOutput
+  login(input: AuthUserInput): LoginOutput
 }

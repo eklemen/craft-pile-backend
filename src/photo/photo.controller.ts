@@ -6,7 +6,6 @@ import {
   UploadedFile,
   UseInterceptors,
   Res,
-  Get,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { HttpStatus } from '@nestjs/common';

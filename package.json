@@ -9,6 +9,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "generate": "ts-node generate-types-from-gql",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -24,6 +25,7 @@
     "typeorm:ls": "typeorm migration:show -d ./datasource.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.335.0",
     "@aws-sdk/client-s3": "3.288.0",
     "@aws-sdk/s3-request-presigner": "^3.296.0",
     "@nestjs/apollo": "10.2.0",
