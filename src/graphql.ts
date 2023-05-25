@@ -50,6 +50,11 @@ export class AuthUserInput {
     password: string;
 }
 
+export class ConfirmationCodeInput {
+    code: string;
+    email: string;
+}
+
 export class Album {
     __typename?: 'Album';
     id: string;
@@ -87,9 +92,11 @@ export abstract class IMutation {
 
     abstract assignPhotosToAnotherChild(input?: Nullable<AssignPhotosToAnotherChildInput>): string[] | Promise<string[]>;
 
-    abstract registerUser(input?: Nullable<AuthUserInput>): Nullable<AuthUserToken> | Promise<Nullable<AuthUserToken>>;
+    abstract registerUser(input?: Nullable<AuthUserInput>): Nullable<RegistrationOutput> | Promise<Nullable<RegistrationOutput>>;
 
-    abstract login(input?: Nullable<AuthUserInput>): Nullable<AuthUserToken> | Promise<Nullable<AuthUserToken>>;
+    abstract verifyConfirmationCode(input?: Nullable<ConfirmationCodeInput>): Nullable<RegistrationOutput> | Promise<Nullable<RegistrationOutput>>;
+
+    abstract login(input?: Nullable<AuthUserInput>): Nullable<LoginOutput> | Promise<Nullable<LoginOutput>>;
 }
 
 export class Child {
@@ -135,7 +142,22 @@ export class Account {
 
 export class AuthUserToken {
     __typename?: 'AuthUserToken';
-    authToken: string;
+    accessToken: string;
+    expiresIn: number;
+    idToken: string;
+    refreshToken: string;
+}
+
+export class LoginOutput {
+    __typename?: 'LoginOutput';
+    data?: Nullable<AuthUserToken>;
+    error?: Nullable<string>;
+}
+
+export class RegistrationOutput {
+    __typename?: 'RegistrationOutput';
+    success: boolean;
+    error?: Nullable<string>;
 }
 
 type Nullable<T> = T | null;
