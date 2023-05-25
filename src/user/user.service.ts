@@ -9,21 +9,18 @@ export class UserService {
 
   async getUserById(email: string): Promise<User> {
     // TODO: limit albums
-    const users = await this.datasource.manager.find(User, {
+    const user = await this.datasource.manager.findOne(User, {
       where: { email },
       relations: ['account', 'account.children', 'account.children.albums'],
     });
-    return users[0];
+    return user;
   }
 
-  async createUser({ email, password }: { email: string; password: string }) {
+  async createUser({ email }: { email: string }) {
     const account = await this.datasource.getRepository(Account).save({});
-    const user = await this.datasource.manager.save(User, {
+    return this.datasource.manager.save(User, {
       email,
-      password,
       account,
     });
-    delete user.password;
-    return user;
   }
 }

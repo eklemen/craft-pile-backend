@@ -1,32 +1,40 @@
-import { ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GqlExecutionContext } from '@nestjs/graphql';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   getRequest(context: ExecutionContext) {
     const ctx = GqlExecutionContext.create(context);
-    // req used in http queries and mutations, connection is used in websocket subscription connections, check AppModule
     const { req, connection } = ctx.getContext();
 
-    // if subscriptions/webSockets, let it pass headers from connection.context to passport-jwt
     return connection && connection.context && connection.context.headers
       ? connection.context
       : req;
   }
-  // canActivate(context: ExecutionContext) {
-  //   const ctx = GqlExecutionContext.create(context);
-  //   const { req } = ctx.getContext();
-  //
-  //   return super.canActivate(
-  //     new ExecutionContextHost([req]),
-  //   );
-  // }
-  //
-  // handleRequest(err: any, user: any) {
-  //   if (err || !user) {
-  //     throw err || new AuthenticationError('GqlAuthGuard');
-  //   }
-  //   return user;
-  // }
+
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+    const canActivate = super.canActivate(context);
+    if (canActivate instanceof Observable) {
+      return canActivate.toPromise();
+    }
+    return canActivate;
+  }
+
+  handleRequest(err: any, user: any, info: Error) {
+    if (err || !user) {
+      throw (
+        err ||
+        new UnauthorizedException(info ? info.message : 'Authentication failed')
+      );
+    }
+    return user;
+  }
 }
