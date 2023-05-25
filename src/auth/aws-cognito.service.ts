@@ -14,12 +14,16 @@ import {
 import { ConfigService } from '@nestjs/config';
 import * as crypto from 'crypto';
 import { AuthUserInput, ConfirmationCodeInput } from '../graphql';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AwsCognitoService {
   private readonly cognitoClient: CognitoIdentityProviderClient;
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly userService: UserService,
+  ) {
     this.cognitoClient = new CognitoIdentityProviderClient({
       region: 'us-east-1',
     });
@@ -44,7 +48,9 @@ export class AwsCognitoService {
       SecretHash: secretHash,
     };
     const command = new SignUpCommand(input);
-    return this.cognitoClient.send(command);
+    const cognitoResponse = await this.cognitoClient.send(command);
+    await this.userService.createUser({ email });
+    return cognitoResponse;
   }
 
   async verifyConfirmationCode({
