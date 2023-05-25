@@ -11,7 +11,6 @@ export class UserResolver {
   @UseGuards(JwtAuthGuard)
   @Query()
   async getUser(_: any, @Context() ctx: Ctx) {
-    console.log('ctx.req.user-------->', ctx.req.user);
     return await this.userService.getUserById(ctx.req.user.email);
   }
 }
