@@ -33,13 +33,17 @@ jobs:
       - name: Prepare build args
         id: prepare_build_args
         run: |
+          echo "JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }}" >> .env
+          echo "AWS_COGNITO_CLIENT_ID=${{ secrets.AWS_COGNITO_CLIENT_ID }}" >> .env
+          echo "AWS_COGNITO_CLIENT_SECRET=${{ secrets.AWS_COGNITO_CLIENT_SECRET }}" >> .env
+          echo "AWS_COGNITO_USER_POOL_ID=${{ secrets.AWS_COGNITO_USER_POOL_ID }}" >> .env
+          echo "AWS_COGNITO_AUTHORITY=${{ secrets.AWS_COGNITO_AUTHORITY }}" >> .env
           echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
           echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env
           echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
           echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env
           echo -e "SSL_CERT=$(echo '${{ secrets.SSL_CERT_BASE64 }}' | base64 --decode)" >> .env
 
       - name: Build and push Docker image
