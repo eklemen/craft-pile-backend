@@ -4,6 +4,20 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { passportJwtSecret } from 'jwks-rsa';
 
+interface CognitoIdToken {
+  sub: string;
+  aud: string;
+  email_verified: boolean;
+  token_use: string;
+  auth_time: number;
+  iss: string;
+  cognito_username: string;
+  exp: number;
+  given_name: string;
+  iat: number;
+  email: string;
+}
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly configService: ConfigService) {
@@ -22,8 +36,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: any) {
-    console.log('payload-------->', payload);
+  async validate(payload: CognitoIdToken) {
     return { idUser: payload.sub, email: payload.email };
   }
 }
