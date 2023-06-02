@@ -2,7 +2,6 @@ import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { UserService } from '../user/user.service';
 import {
   AuthUserInput,
-  AuthUserToken,
   ConfirmationCodeInput,
   LoginOutput,
   RegistrationOutput,
