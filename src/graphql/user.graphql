@@ -3,7 +3,6 @@ type User {
   access_token: String,
   email: String!
   account: Account!
-  children: [Child!]!
 }
 
 type Account {
@@ -27,6 +26,11 @@ type RegistrationOutput {
   success: Boolean!
   error: String
 }
+
+type GetUserOutput {
+  data: User
+  error: String
+}
 #####################
 # Input types
 #####################
@@ -46,7 +50,7 @@ input ConfirmationCodeInput {
 #####################
 
 type Query {
-  getUser: User
+  getUser: GetUserOutput
 }
 
 

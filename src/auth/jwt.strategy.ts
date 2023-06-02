@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { passportJwtSecret } from 'jwks-rsa';
+import { UserService } from '../user/user.service';
 
 interface CognitoIdToken {
   sub: string;
@@ -20,7 +21,10 @@ interface CognitoIdToken {
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly userService: UserService,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -37,6 +41,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: CognitoIdToken) {
-    return { idUser: payload.sub, email: payload.email };
+    const user = await this.userService.getUserByEmail(payload.email);
+    return {
+      idUser: payload.sub,
+      email: payload.email,
+      accountId: user.account.id,
+    };
   }
 }

@@ -10,7 +10,7 @@ import { options } from './db/datasource';
 import { ChildModule } from './child/child.module';
 import { AlbumModule } from './album/album.module';
 import { PhotoModule } from './photo/photo.module';
-import { S3Module } from './s3/s3.module';
+import { StorageModule } from './storage/storage.module';
 
 @Module({
   imports: [
@@ -29,16 +29,12 @@ import { S3Module } from './s3/s3.module';
       },
       playground: true,
     }),
-    S3Module.registerAsync({
+    StorageModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => {
-        return {
-          accessKeyId: configService.get('AWS_ACCESS_KEY_ID'),
-          secretAccessKey: configService.get('AWS_SECRET_ACCESS_KEY'),
-          region: configService.get('AWS_REGION'),
-          bucket: configService.get('AWS_BUCKET'),
-        };
-      },
+      useFactory: (configService: ConfigService) => ({
+        connectionString: configService.get('STORAGE_CONNECTION_STRING'),
+        container: configService.get('STORAGE_CONTAINER'),
+      }),
       inject: [ConfigService],
       isGlobal: true,
     }),

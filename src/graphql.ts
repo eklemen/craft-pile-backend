@@ -56,7 +56,6 @@ export class ConfirmationCodeInput {
 }
 
 export class Album {
-    __typename?: 'Album';
     id: string;
     name: string;
     description?: Nullable<string>;
@@ -64,8 +63,6 @@ export class Album {
 }
 
 export abstract class IQuery {
-    __typename?: 'IQuery';
-
     abstract getAlbumsForChild(input?: Nullable<GetAlbumsForChildInput>): Nullable<Album>[] | Promise<Nullable<Album>[]>;
 
     abstract getChildren(): Nullable<Child>[] | Promise<Nullable<Child>[]>;
@@ -74,12 +71,10 @@ export abstract class IQuery {
 
     abstract getPilePhotos(): Nullable<PilePhotos[]> | Promise<Nullable<PilePhotos[]>>;
 
-    abstract getUser(): Nullable<User> | Promise<Nullable<User>>;
+    abstract getUser(): Nullable<GetUserOutput> | Promise<Nullable<GetUserOutput>>;
 }
 
 export abstract class IMutation {
-    __typename?: 'IMutation';
-
     abstract createAlbum(input?: Nullable<CreateAlbumInput>): Nullable<Album>[] | Promise<Nullable<Album>[]>;
 
     abstract createChild(input: CreateChildInput): Nullable<Nullable<Child>[]> | Promise<Nullable<Nullable<Child>[]>>;
@@ -100,7 +95,6 @@ export abstract class IMutation {
 }
 
 export class Child {
-    __typename?: 'Child';
     id: string;
     name: string;
     dateOfBirth?: Nullable<string>;
@@ -108,7 +102,6 @@ export class Child {
 }
 
 export class Photo {
-    __typename?: 'Photo';
     id: string;
     bucketName: string;
     objectKey: string;
@@ -119,29 +112,24 @@ export class Photo {
 }
 
 export class PilePhotos {
-    __typename?: 'PilePhotos';
     photos: Nullable<Photo>[];
     id: string;
     name: string;
 }
 
 export class User {
-    __typename?: 'User';
     id: string;
     access_token?: Nullable<string>;
     email: string;
     account: Account;
-    children: Child[];
 }
 
 export class Account {
-    __typename?: 'Account';
     id: string;
     children?: Nullable<Nullable<Child>[]>;
 }
 
 export class AuthUserToken {
-    __typename?: 'AuthUserToken';
     accessToken: string;
     expiresIn: number;
     idToken: string;
@@ -149,14 +137,17 @@ export class AuthUserToken {
 }
 
 export class LoginOutput {
-    __typename?: 'LoginOutput';
     data?: Nullable<AuthUserToken>;
     error?: Nullable<string>;
 }
 
 export class RegistrationOutput {
-    __typename?: 'RegistrationOutput';
     success: boolean;
+    error?: Nullable<string>;
+}
+
+export class GetUserOutput {
+    data?: Nullable<User>;
     error?: Nullable<string>;
 }
 

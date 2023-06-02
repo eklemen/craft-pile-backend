@@ -7,6 +7,12 @@ import { DataSource } from 'typeorm';
 export class UserService {
   constructor(private datasource: DataSource) {}
 
+  async getUserByEmail(email: string): Promise<User> {
+    return this.datasource.manager.findOne(User, {
+      where: { email },
+      relations: ['account'],
+    });
+  }
   async getUserById(email: string): Promise<User> {
     // TODO: limit albums
     const user = await this.datasource.manager.findOne(User, {

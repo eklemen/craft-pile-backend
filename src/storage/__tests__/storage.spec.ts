@@ -1,22 +1,22 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { S3Service } from '../s3.service';
-import { S3_OPTIONS } from '../s3.constants';
+import { StorageService } from '../storage.service';
+import { STORAGE_OPTIONS } from '../storage.constants';
 
-describe('S3Service', () => {
-  let service: S3Service;
+describe('StorageService', () => {
+  let service: StorageService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        S3Service,
+        StorageService,
         {
-          provide: S3_OPTIONS,
+          provide: STORAGE_OPTIONS,
           useValue: {},
         },
       ],
     }).compile();
 
-    service = module.get<S3Service>(S3Service);
+    service = module.get<StorageService>(StorageService);
   });
 
   test('should be defined', () => {
