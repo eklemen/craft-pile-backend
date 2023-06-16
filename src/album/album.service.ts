@@ -3,14 +3,14 @@ import { DataSource, EntityManager, Repository } from 'typeorm';
 import { Album, CreateAlbumInput } from '../graphql';
 import { Album as AlbumModel } from '../db/models/Album.model';
 import { InjectEntityManager } from '@nestjs/typeorm';
-import { S3Service } from '../s3/s3.service';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable()
 export class AlbumService {
   constructor(
     private datasource: DataSource,
     @InjectEntityManager() private entityManager: EntityManager,
-    private s3Service: S3Service,
+    private s3Service: StorageService,
   ) {}
 
   async createAlbum(album: CreateAlbumInput, accountId: string) {

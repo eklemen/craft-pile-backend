@@ -10,7 +10,7 @@ import {
 import { Response } from 'express';
 import { HttpStatus } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { S3Service } from '../s3/s3.service';
+import { StorageService } from '../storage/storage.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Context } from '@nestjs/graphql';
 import { Ctx } from '../types/context';
@@ -19,7 +19,7 @@ import { NewPhotoDetails, PhotoService } from './photo.service';
 @Controller('photo')
 export class PhotoController {
   constructor(
-    private readonly s3Service: S3Service,
+    private readonly storageService: StorageService,
     private readonly photoService: PhotoService,
   ) {}
 
@@ -33,7 +33,7 @@ export class PhotoController {
     @Res() res: Response,
   ) {
     try {
-      await this.s3Service.putObject({
+      await this.storageService.putObject({
         image: file.buffer,
         body: req.body,
         user: ctx.req.user,
@@ -46,7 +46,7 @@ export class PhotoController {
       if (req.body.albumId) {
         photoDetails.albumId = req.body.albumId;
       }
-      await this.photoService.savePhoto(photoDetails);
+      // await this.photoService.savePhoto(photoDetails);
       return res.status(HttpStatus.OK).json({ message: 'Photo uploaded' });
     } catch (err) {
       return res
@@ -63,7 +63,7 @@ export class PhotoController {
   //   @Context() ctx: Ctx,
   //   @Res() res: Response,
   // ) {
-  //   const r = await this.s3Service.getPresignedUrl({
+  //   const r = await this.storageService.getPresignedUrl({
   //     key: req.body.objectKey,
   //     accountId: ctx.req.user.accountId,
   //   });

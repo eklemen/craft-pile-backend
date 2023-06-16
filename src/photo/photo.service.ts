@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DataSource, In } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Photo } from '../db/models/Photo.model';
-import { S3Service } from '../s3/s3.service';
+import { StorageService } from '../storage/storage.service';
 import {
   AssignPhotosToAlbumInput,
   AssignPhotosToAnotherChildInput,
@@ -52,12 +52,12 @@ export class PhotoService {
   constructor(
     private readonly datasource: DataSource,
     private readonly configService: ConfigService,
-    private readonly s3Service: S3Service,
+    private readonly s3Service: StorageService,
   ) {}
 
   async savePhoto(photoDetails: NewPhotoDetails) {
     const bucketName = this.configService.get<string>('AWS_BUCKET');
-    const { original, thumbnail } = S3Service.buildS3Keys(
+    const { original, thumbnail } = StorageService.buildStorageKeys(
       photoDetails.accountId,
       photoDetails.objectKey,
     );

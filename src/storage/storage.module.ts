@@ -1,36 +1,38 @@
 import { DynamicModule, Module, Provider } from '@nestjs/common';
-import { S3Service } from './s3.service';
-import { S3_OPTIONS } from './s3.constants';
+import { StorageService } from './storage.service';
+import { STORAGE_OPTIONS } from './storage.constants';
 import * as optionTypes from './interfaces';
 
 @Module({})
-export class S3Module {
+export class StorageModule {
   static register(
-    options: optionTypes.S3Options,
+    options: optionTypes.StorageOptions,
     isGlobal: boolean,
   ): DynamicModule {
     return {
-      module: S3Module,
+      module: StorageModule,
       providers: [
         {
-          provide: S3_OPTIONS,
+          provide: STORAGE_OPTIONS,
           useValue: options,
         },
-        S3Service,
+        StorageService,
       ],
-      exports: [S3Service],
+      exports: [StorageService],
       global: isGlobal,
     };
   }
 
-  static registerAsync(options: optionTypes.S3AsyncOptions): DynamicModule {
+  static registerAsync(
+    options: optionTypes.StorageAsyncOptions,
+  ): DynamicModule {
     const { isGlobal, ...opts } = options;
     const asyncOpts = this.createAsyncProviders(opts);
     return {
-      module: S3Module,
+      module: StorageModule,
       imports: opts.imports,
-      providers: [S3Service, ...asyncOpts],
-      exports: [S3Service],
+      providers: [StorageService, ...asyncOpts],
+      exports: [StorageService],
       global: isGlobal,
     };
   }
@@ -38,7 +40,7 @@ export class S3Module {
   // The methods below are used to create dynamic options.
   // Do not modify unless you know what you are doing.
   private static createAsyncProviders(
-    options: optionTypes.S3AsyncOptions,
+    options: optionTypes.StorageAsyncOptions,
   ): Provider[] {
     if (options.useExisting || options.useFactory) {
       return [this.createAsyncOptionsProvider(options)];
@@ -53,18 +55,18 @@ export class S3Module {
   }
 
   private static createAsyncOptionsProvider(
-    options: optionTypes.S3AsyncOptions,
+    options: optionTypes.StorageAsyncOptions,
   ): Provider {
     if (options.useFactory) {
       return {
-        provide: S3_OPTIONS,
+        provide: STORAGE_OPTIONS,
         useFactory: options.useFactory,
         inject: options.inject || [],
       };
     }
     return {
-      provide: S3_OPTIONS,
-      useFactory: async (optionsFactory: optionTypes.S3OptionsFactory) =>
+      provide: STORAGE_OPTIONS,
+      useFactory: async (optionsFactory: optionTypes.StorageOptionsFactory) =>
         await optionsFactory.createOptions(),
       inject: [options.useExisting || options.useClass],
     };
