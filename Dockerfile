@@ -15,7 +15,7 @@ RUN apk add --no-cache --update \
     make
 
 # Install the app dependencies
-RUN yarn install --frozen-lockfile --production=false
+RUN yarn install --production=false
 
 # Copy the rest of the application
 COPY . .
