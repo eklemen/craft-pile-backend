@@ -20,6 +20,10 @@ export class StorageService implements OnModuleInit {
   ) {}
 
   onModuleInit() {
+    console.log(
+      'this.options.connectionString-------->',
+      this.options.connectionString,
+    );
     this.client = BlobServiceClient.fromConnectionString(
       this.options.connectionString,
     );
