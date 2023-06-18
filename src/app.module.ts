@@ -31,10 +31,16 @@ import { StorageModule } from './storage/storage.module';
     }),
     StorageModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        connectionString: configService.get('STORAGE_CONNECTION_STRING'),
-        container: configService.get('STORAGE_CONTAINER'),
-      }),
+      useFactory: (configService: ConfigService) => {
+        console.log(
+          "configService.get('STORAGE_CONNECTION_STRING')-------->",
+          configService.get('STORAGE_CONNECTION_STRING'),
+        );
+        return {
+          connectionString: configService.get('STORAGE_CONNECTION_STRING'),
+          container: configService.get('STORAGE_CONTAINER'),
+        };
+      },
       inject: [ConfigService],
       isGlobal: true,
     }),
