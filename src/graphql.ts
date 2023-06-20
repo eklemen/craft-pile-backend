@@ -96,7 +96,7 @@ export abstract class IMutation {
 
     abstract verifyConfirmationCode(input?: Nullable<ConfirmationCodeInput>): Nullable<RegistrationOutput> | Promise<Nullable<RegistrationOutput>>;
 
-    abstract login(input?: Nullable<AuthUserInput>): Nullable<LoginOutput> | Promise<Nullable<LoginOutput>>;
+    abstract login(input?: Nullable<AuthUserInput>): Nullable<AuthUserToken> | Promise<Nullable<AuthUserToken>>;
 }
 
 export class Child {
@@ -145,12 +145,6 @@ export class AuthUserToken {
     expiresIn: number;
     idToken: string;
     refreshToken: string;
-}
-
-export class LoginOutput {
-    __typename?: 'LoginOutput';
-    data?: Nullable<AuthUserToken>;
-    error?: Nullable<string>;
 }
 
 export class RegistrationOutput {

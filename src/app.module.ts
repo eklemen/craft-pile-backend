@@ -28,14 +28,16 @@ import { StorageModule } from './storage/storage.module';
         outputAs: 'class',
       },
       playground: true,
+      formatError: (error) => {
+        return {
+          message: error.message,
+          status: error.extensions && error.extensions.code,
+        };
+      },
     }),
     StorageModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
-        console.log(
-          "configService.get('STORAGE_CONNECTION_STRING')-------->",
-          configService.get('STORAGE_CONNECTION_STRING'),
-        );
         return {
           connectionString: configService.get('STORAGE_CONNECTION_STRING'),
           container: configService.get('STORAGE_CONTAINER'),

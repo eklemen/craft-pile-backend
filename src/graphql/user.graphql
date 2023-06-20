@@ -17,11 +17,6 @@ type AuthUserToken {
   refreshToken: String!
 }
 
-type LoginOutput {
-  data: AuthUserToken
-  error: String
-}
-
 type RegistrationOutput {
   success: Boolean!
   error: String
@@ -57,5 +52,5 @@ type Query {
 type Mutation {
   registerUser(input: AuthUserInput): RegistrationOutput
   verifyConfirmationCode(input: ConfirmationCodeInput): RegistrationOutput
-  login(input: AuthUserInput): LoginOutput
+  login(input: AuthUserInput): AuthUserToken
 }
