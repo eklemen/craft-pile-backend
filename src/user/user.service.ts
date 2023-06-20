@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Account } from '../db/models/Account.model';
 import { User } from '../db/models/User.model';
 import { DataSource } from 'typeorm';
@@ -15,11 +15,24 @@ export class UserService {
   }
   async getUserById(email: string): Promise<User> {
     // TODO: limit albums
-    const user = await this.datasource.manager.findOne(User, {
-      where: { email },
-      relations: ['account', 'account.children', 'account.children.albums'],
-    });
-    return user;
+    try {
+      return this.datasource.manager.findOne(User, {
+        where: { email },
+        relations: ['account', 'account.children'],
+      });
+    } catch (err) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNAUTHORIZED,
+          error:
+            'You do not have access to this record, or you token is expired.',
+        },
+        HttpStatus.UNAUTHORIZED,
+        {
+          cause: err,
+        },
+      );
+    }
   }
 
   async createUser({ email }: { email: string }) {

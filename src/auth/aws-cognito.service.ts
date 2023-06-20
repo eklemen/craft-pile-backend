@@ -10,6 +10,12 @@ import {
   InitiateAuthCommand,
   InitiateAuthCommandInput,
   InitiateAuthCommandOutput,
+  ForgotPasswordCommand,
+  ForgotPasswordCommandInput,
+  ForgotPasswordCommandOutput,
+  ConfirmForgotPasswordCommand,
+  ConfirmForgotPasswordCommandInput,
+  ConfirmForgotPasswordCommandOutput,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { ConfigService } from '@nestjs/config';
 import * as crypto from 'crypto';
@@ -84,6 +90,36 @@ export class AwsCognitoService {
       },
     };
     const command = new InitiateAuthCommand(input);
+    return this.cognitoClient.send(command);
+  }
+
+  async forgotPassword({
+    email,
+  }: AuthUserInput): Promise<ForgotPasswordCommandOutput> {
+    const secretHash = this.createSecretHash(email);
+    const input: ForgotPasswordCommandInput = {
+      ClientId: this.configService.get('AWS_COGNITO_CLIENT_ID'),
+      Username: email,
+      SecretHash: secretHash,
+    };
+    const command = new ForgotPasswordCommand(input);
+    return this.cognitoClient.send(command);
+  }
+
+  async confirmForgotPassword({
+    email,
+    confirmationCode,
+    password,
+  }: Record<string, string>): Promise<ConfirmForgotPasswordCommandOutput> {
+    const secretHash = this.createSecretHash(email);
+    const input: ConfirmForgotPasswordCommandInput = {
+      ClientId: this.configService.get('AWS_COGNITO_CLIENT_ID'),
+      Username: email,
+      ConfirmationCode: confirmationCode,
+      Password: password,
+      SecretHash: secretHash,
+    };
+    const command = new ForgotPasswordCommand(input);
     return this.cognitoClient.send(command);
   }
 }
