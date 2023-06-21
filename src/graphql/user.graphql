@@ -45,7 +45,7 @@ input ConfirmationCodeInput {
 #####################
 
 type Query {
-  getUser: GetUserOutput
+  getUser: User
 }
 
 

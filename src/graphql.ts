@@ -74,7 +74,7 @@ export abstract class IQuery {
 
     abstract getPilePhotos(): Nullable<PilePhotos[]> | Promise<Nullable<PilePhotos[]>>;
 
-    abstract getUser(): Nullable<GetUserOutput> | Promise<Nullable<GetUserOutput>>;
+    abstract getUser(): Nullable<User> | Promise<Nullable<User>>;
 }
 
 export abstract class IMutation {
