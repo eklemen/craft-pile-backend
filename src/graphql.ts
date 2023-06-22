@@ -18,6 +18,26 @@ export class GetAlbumsForChildInput {
     childId: string;
 }
 
+export class AuthUserInput {
+    email: string;
+    password: string;
+}
+
+export class ConfirmationCodeInput {
+    code: string;
+    email: string;
+}
+
+export class ForgotPasswordInput {
+    email: string;
+}
+
+export class ConfirmForgotPasswordInput {
+    email: string;
+    confirmationCode: string;
+    password: string;
+}
+
 export class CreateChildInput {
     name: string;
     dateOfBirth?: Nullable<string>;
@@ -43,16 +63,6 @@ export class AssignPhotosToAlbumInput {
 export class AssignPhotosToAnotherChildInput {
     photoIds: string[];
     childId: string;
-}
-
-export class AuthUserInput {
-    email: string;
-    password: string;
-}
-
-export class ConfirmationCodeInput {
-    code: string;
-    email: string;
 }
 
 export class Album {
@@ -82,6 +92,16 @@ export abstract class IMutation {
 
     abstract createAlbum(input?: Nullable<CreateAlbumInput>): Nullable<Album>[] | Promise<Nullable<Album>[]>;
 
+    abstract registerUser(input?: Nullable<AuthUserInput>): Nullable<RegistrationOutput> | Promise<Nullable<RegistrationOutput>>;
+
+    abstract verifyConfirmationCode(input?: Nullable<ConfirmationCodeInput>): Nullable<RegistrationOutput> | Promise<Nullable<RegistrationOutput>>;
+
+    abstract login(input?: Nullable<AuthUserInput>): Nullable<AuthUserToken> | Promise<Nullable<AuthUserToken>>;
+
+    abstract forgotPassword(input?: Nullable<ForgotPasswordInput>): Nullable<ResetPasswordOutput> | Promise<Nullable<ResetPasswordOutput>>;
+
+    abstract confirmForgotPassword(input?: Nullable<ConfirmForgotPasswordInput>): Nullable<ResetPasswordOutput> | Promise<Nullable<ResetPasswordOutput>>;
+
     abstract createChild(input: CreateChildInput): Nullable<Nullable<Child>[]> | Promise<Nullable<Nullable<Child>[]>>;
 
     abstract deleteChild(input: DeleteChildInput): Nullable<Nullable<Child>[]> | Promise<Nullable<Nullable<Child>[]>>;
@@ -91,12 +111,25 @@ export abstract class IMutation {
     abstract assignPhotosToAlbum(input?: Nullable<AssignPhotosToAlbumInput>): string[] | Promise<string[]>;
 
     abstract assignPhotosToAnotherChild(input?: Nullable<AssignPhotosToAnotherChildInput>): string[] | Promise<string[]>;
+}
 
-    abstract registerUser(input?: Nullable<AuthUserInput>): Nullable<RegistrationOutput> | Promise<Nullable<RegistrationOutput>>;
+export class AuthUserToken {
+    __typename?: 'AuthUserToken';
+    accessToken: string;
+    expiresIn: number;
+    idToken: string;
+    refreshToken: string;
+}
 
-    abstract verifyConfirmationCode(input?: Nullable<ConfirmationCodeInput>): Nullable<RegistrationOutput> | Promise<Nullable<RegistrationOutput>>;
+export class RegistrationOutput {
+    __typename?: 'RegistrationOutput';
+    success: boolean;
+    error?: Nullable<string>;
+}
 
-    abstract login(input?: Nullable<AuthUserInput>): Nullable<AuthUserToken> | Promise<Nullable<AuthUserToken>>;
+export class ResetPasswordOutput {
+    __typename?: 'ResetPasswordOutput';
+    success?: Nullable<boolean>;
 }
 
 export class Child {
@@ -137,20 +170,6 @@ export class Account {
     __typename?: 'Account';
     id: string;
     children?: Nullable<Nullable<Child>[]>;
-}
-
-export class AuthUserToken {
-    __typename?: 'AuthUserToken';
-    accessToken: string;
-    expiresIn: number;
-    idToken: string;
-    refreshToken: string;
-}
-
-export class RegistrationOutput {
-    __typename?: 'RegistrationOutput';
-    success: boolean;
-    error?: Nullable<string>;
 }
 
 export class GetUserOutput {

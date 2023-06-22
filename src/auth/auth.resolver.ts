@@ -4,11 +4,15 @@ import {
   AuthUserInput,
   AuthUserToken,
   ConfirmationCodeInput,
+  ConfirmForgotPasswordInput,
+  ForgotPasswordInput,
   RegistrationOutput,
+  ResetPasswordOutput,
 } from '../graphql';
 import { AuthService } from './auth.service';
 import { AwsCognitoService } from './aws-cognito.service';
-import { UserInputError, AuthenticationError } from 'apollo-server-express';
+import { UserInputError } from 'apollo-server-express';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 @Resolver()
 export class AuthResolver {
@@ -52,7 +56,7 @@ export class AuthResolver {
     }
   }
 
-  @Mutation()
+  @Mutation('login')
   async login(@Args('input') input: AuthUserInput): Promise<AuthUserToken> {
     const res = await this.awsCognitoService.login(input);
     if (!res?.AuthenticationResult) {
@@ -66,5 +70,35 @@ export class AuthResolver {
       idToken: IdToken,
       refreshToken: RefreshToken,
     };
+  }
+
+  @Mutation('forgotPassword')
+  async forgotPassword(
+    @Args('input') input: ForgotPasswordInput,
+  ): Promise<ResetPasswordOutput> {
+    try {
+      await this.awsCognitoService.forgotPassword(input);
+      return { success: true };
+    } catch (err) {
+      throw new HttpException(
+        `ForgotPassword: ${err}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Mutation('confirmForgotPassword')
+  async confirmForgotPassword(
+    @Args('input') input: ConfirmForgotPasswordInput,
+  ): Promise<ResetPasswordOutput> {
+    try {
+      await this.awsCognitoService.confirmForgotPassword(input);
+      return { success: true };
+    } catch (err) {
+      throw new HttpException(
+        `ForgotPassword: ${err}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
