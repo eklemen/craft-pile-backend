@@ -1,0 +1,50 @@
+type AuthUserToken {
+  accessToken: String!
+  expiresIn: Int!
+  idToken: String!
+  refreshToken: String!
+}
+
+type RegistrationOutput {
+  success: Boolean!
+  error: String
+}
+
+type ResetPasswordOutput {
+  success: Boolean
+}
+#####################
+# Input types
+#####################
+
+input AuthUserInput {
+  email: String!
+  password: String!
+}
+
+input ConfirmationCodeInput {
+  code: String!
+  email: String!
+}
+
+input ForgotPasswordInput {
+  email: String!
+}
+
+input ConfirmForgotPasswordInput {
+  email: String!
+  confirmationCode: String!
+  password: String!
+}
+
+#####################
+# END Input types
+#####################
+
+type Mutation {
+  registerUser(input: AuthUserInput): RegistrationOutput
+  verifyConfirmationCode(input: ConfirmationCodeInput): RegistrationOutput
+  login(input: AuthUserInput): AuthUserToken
+  forgotPassword(input: ForgotPasswordInput): ResetPasswordOutput
+  confirmForgotPassword(input: ConfirmForgotPasswordInput): ResetPasswordOutput
+}

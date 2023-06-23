@@ -8,13 +8,10 @@ export class ChildService {
   constructor(private datasource: DataSource) {}
 
   async createChild(child: CreateChildInput, accountId: string) {
-    await this.datasource.manager.save(Child, {
+    return this.datasource.manager.save(Child, {
       name: child.name,
       dateOfBirth: child?.dateOfBirth,
       account: { id: accountId },
-    });
-    return await this.datasource.manager.find(Child, {
-      where: { account: { id: accountId } },
     });
   }
 

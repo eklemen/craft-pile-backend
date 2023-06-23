@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {
   CognitoIdentityProviderClient,
   SignUpCommand,
@@ -19,7 +19,12 @@ import {
 } from '@aws-sdk/client-cognito-identity-provider';
 import { ConfigService } from '@nestjs/config';
 import * as crypto from 'crypto';
-import { AuthUserInput, ConfirmationCodeInput } from '../graphql';
+import {
+  AuthUserInput,
+  ConfirmationCodeInput,
+  ConfirmForgotPasswordInput,
+  ResetPasswordOutput,
+} from '../graphql';
 import { UserService } from '../user/user.service';
 
 @Injectable()
@@ -95,7 +100,9 @@ export class AwsCognitoService {
 
   async forgotPassword({
     email,
-  }: AuthUserInput): Promise<ForgotPasswordCommandOutput> {
+  }: {
+    email: string;
+  }): Promise<ForgotPasswordCommandOutput> {
     const secretHash = this.createSecretHash(email);
     const input: ForgotPasswordCommandInput = {
       ClientId: this.configService.get('AWS_COGNITO_CLIENT_ID'),
@@ -103,14 +110,21 @@ export class AwsCognitoService {
       SecretHash: secretHash,
     };
     const command = new ForgotPasswordCommand(input);
-    return this.cognitoClient.send(command);
+    const cognitoResponse = await this.cognitoClient.send(command);
+    if (cognitoResponse?.$metadata?.httpStatusCode !== 200) {
+      throw new HttpException(
+        'Unexpected error resetting password.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+    return cognitoResponse;
   }
 
   async confirmForgotPassword({
     email,
     confirmationCode,
     password,
-  }: Record<string, string>): Promise<ConfirmForgotPasswordCommandOutput> {
+  }: ConfirmForgotPasswordInput): Promise<ConfirmForgotPasswordCommandOutput> {
     const secretHash = this.createSecretHash(email);
     const input: ConfirmForgotPasswordCommandInput = {
       ClientId: this.configService.get('AWS_COGNITO_CLIENT_ID'),
@@ -119,7 +133,14 @@ export class AwsCognitoService {
       Password: password,
       SecretHash: secretHash,
     };
-    const command = new ForgotPasswordCommand(input);
-    return this.cognitoClient.send(command);
+    const command = new ConfirmForgotPasswordCommand(input);
+    const cognitoResponse = await this.cognitoClient.send(command);
+    if (cognitoResponse?.$metadata?.httpStatusCode !== 200) {
+      throw new HttpException(
+        'Unexpected error resetting password.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+    return cognitoResponse;
   }
 }

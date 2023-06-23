@@ -10,18 +10,6 @@ type Account {
   children: [Child]
 }
 
-type AuthUserToken {
-  accessToken: String!
-  expiresIn: Int!
-  idToken: String!
-  refreshToken: String!
-}
-
-type RegistrationOutput {
-  success: Boolean!
-  error: String
-}
-
 type GetUserOutput {
   data: User
   error: String
@@ -29,16 +17,6 @@ type GetUserOutput {
 #####################
 # Input types
 #####################
-
-input AuthUserInput {
-  email: String!
-  password: String!
-}
-
-input ConfirmationCodeInput {
-  code: String!
-  email: String!
-}
 
 #####################
 # END Input types
@@ -48,9 +26,3 @@ type Query {
   getUser: User
 }
 
-
-type Mutation {
-  registerUser(input: AuthUserInput): RegistrationOutput
-  verifyConfirmationCode(input: ConfirmationCodeInput): RegistrationOutput
-  login(input: AuthUserInput): AuthUserToken
-}
